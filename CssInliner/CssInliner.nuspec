@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package  xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Css Inliner</title>
+    <authors>tocsoft</authors>
+    <owners>tocsoft</owners>
+
+    <projectUrl>https://github.com/tocsoft/CssInliner</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Inlines css styles into the html dom</description>
+
+    <copyright>Copyright 2012</copyright>
+    <tags>Css Html Email</tags>
+    <dependencies>
+
+    </dependencies>
+  </metadata>
+
+</package>
