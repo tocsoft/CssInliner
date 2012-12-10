@@ -10,80 +10,11 @@ namespace CssInliner
 {
     public class Inliner
     {
-		public static string InlineCssIntoHtml(string html)
-		{
+		
+		public static string InlineCssIntoHtml(string html){
 			HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 			doc.LoadHtml(html);
-
-
-			var styleTags = doc.DocumentNode.SelectNodes("descendant-or-self::style");
-
-
-			var cssParser = new ExCSS.StylesheetParser();
-			var styles = styleTags.Select(x => cssParser.Parse(x.InnerText));
-
-
-			var allElements = doc.DocumentNode.SelectNodes("descendant-or-self::*");
-
-
-			Dictionary<HtmlNode, List<ScopedDeclaration>> matches = new Dictionary<HtmlNode, List<ScopedDeclaration>>();
-
-			foreach (var n in allElements)
-			{
-				foreach (var r in styles.SelectMany(x => x.RuleSets))
-				{
-					var matchedSelectors = n.Matches(r.Selectors);
-
-
-					if (matchedSelectors.Any())
-					{
-
-						if (!matches.ContainsKey(n))
-						{
-							matches.Add(n, new List<ScopedDeclaration>());
-						}
-						
-						var matchedDeclerations = r.Declarations.SelectMany(x => matchedSelectors.Select(y => new ScopedDeclaration(x,y)));
-						matches[n].AddRange(matchedDeclerations);
-
-						//TODO update the appending css rule to make sure the correctly prioritised rule is used
-						if (n.Attributes.Contains("style")){
-							var inlineStyles = n.Attributes["style"].Value;
-							
-							var inline = cssParser.Parse("* { " + inlineStyles + "}")
-											.RuleSets.Single()
-											.Declarations
-											.Select(x => new ScopedDeclaration(x));
-							
-							matches[n].AddRange(inline);
-						}
-					}
-				}
-			}
-
-			//go through and update all styles
-			foreach (var nodeRules in matches)
-			{
-				var node = nodeRules.Key;
-
-				var declerations = nodeRules.Value.GroupBy(x => x.Decleration.Name).Select(x => x.OrderBy(r => r.Scope).First()).OrderBy(r => r.Scope);
-
-
-				StringBuilder stylesSB = new StringBuilder();
-				foreach (var d in declerations)
-				{
-					stylesSB.Append(d.Decleration.ToString());
-					stylesSB.Append(";");
-				}
-
-				if (!node.Attributes.Contains("style"))
-				{
-					node.Attributes.Add("style", stylesSB.ToString());
-				}
-				else { 
-					node.Attributes["style"].Value = stylesSB.ToString();
-				}
-			}
+			InlineCssIntoHtml(doc);
 
 
 			var sb = new StringBuilder();
@@ -94,6 +25,85 @@ namespace CssInliner
 			}
 
 			return sb.ToString();
+		}
+
+		public static void InlineCssIntoHtml(HtmlAgilityPack.HtmlDocument doc)
+		{
+			var styleTags = doc.DocumentNode.SelectNodes("descendant-or-self::style");
+
+			if (styleTags != null)
+			{
+				//we only need to try and inline the css is there is any to inline in the first place
+
+				var cssParser = new ExCSS.StylesheetParser();
+				var styles = styleTags.Select(x => cssParser.Parse(x.InnerText));
+
+
+				var allElements = doc.DocumentNode.SelectNodes("descendant-or-self::*");
+
+
+				Dictionary<HtmlNode, List<ScopedDeclaration>> matches = new Dictionary<HtmlNode, List<ScopedDeclaration>>();
+
+				foreach (var n in allElements)
+				{
+					foreach (var r in styles.SelectMany(x => x.RuleSets))
+					{
+						var matchedSelectors = n.Matches(r.Selectors);
+
+
+						if (matchedSelectors.Any())
+						{
+
+							if (!matches.ContainsKey(n))
+							{
+								matches.Add(n, new List<ScopedDeclaration>());
+							}
+
+							var matchedDeclerations = r.Declarations.SelectMany(x => matchedSelectors.Select(y => new ScopedDeclaration(x, y)));
+							matches[n].AddRange(matchedDeclerations);
+
+							//TODO update the appending css rule to make sure the correctly prioritised rule is used
+							if (n.Attributes.Contains("style"))
+							{
+								var inlineStyles = n.Attributes["style"].Value;
+
+								var inline = cssParser.Parse("* { " + inlineStyles + "}")
+												.RuleSets.Single()
+												.Declarations
+												.Select(x => new ScopedDeclaration(x));
+
+								matches[n].AddRange(inline);
+							}
+						}
+					}
+				}
+
+				//go through and update all styles
+				foreach (var nodeRules in matches)
+				{
+					var node = nodeRules.Key;
+
+					var declerations = nodeRules.Value.GroupBy(x => x.Decleration.Name).Select(x => x.OrderBy(r => r.Scope).First()).OrderBy(r => r.Scope);
+
+
+					StringBuilder stylesSB = new StringBuilder();
+					foreach (var d in declerations)
+					{
+						stylesSB.Append(d.Decleration.ToString());
+						stylesSB.Append(";");
+					}
+
+					if (!node.Attributes.Contains("style"))
+					{
+						node.Attributes.Add("style", stylesSB.ToString());
+					}
+					else
+					{
+						node.Attributes["style"].Value = stylesSB.ToString();
+					}
+				}
+
+			}
 		}
     }
 
