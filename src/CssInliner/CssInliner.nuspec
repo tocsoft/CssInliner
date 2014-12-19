@@ -11,11 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Inlines css styles into the html dom</description>
 
-    <copyright>Copyright 2012</copyright>
+    <copyright>Copyright 2014</copyright>
     <tags>Css Html Email</tags>
     <dependencies>
 
     </dependencies>
   </metadata>
-
 </package>

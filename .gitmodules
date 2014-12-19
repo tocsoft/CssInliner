@@ -1,0 +1,3 @@
+[submodule "submodules/ExCSS"]
+	path = submodules/ExCSS
+	url = https://github.com/tocsoft/ExCSS.git
