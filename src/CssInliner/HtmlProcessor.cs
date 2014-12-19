@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Tocsoft.CssInliner
 {
@@ -29,77 +30,113 @@ namespace Tocsoft.CssInliner
         {
             if (!processed)
             {
-                Uri baseUri = GetBaseUri(_document);
 
-                var rules = await LoadCss(baseUri, _document);
+                var rules = await LoadCss();
 
-                var allElements = _document.DocumentNode.SelectNodes("descendant-or-self::*");
+                var matches = MatchStylesToNodes(rules);
 
-                Dictionary<HtmlNode, List<ScopedProperty>> matches = new Dictionary<HtmlNode, List<ScopedProperty>>();
+                ApplyStylesToNodes(matches);
 
-                foreach (var n in allElements)
+                if (_config.StripStyleTags)
                 {
-                    foreach (var r in rules)
-                    {
-                        if (n.IsMatch(r.Scope.Selector))
-                        {
-                            if (!matches.ContainsKey(n))
-                            {
-                                matches.Add(n, new List<ScopedProperty>());
-                            }
-                            matches[n].Add(r);
-                        }
-
-                        //TODO update the appending css rule to make sure the correctly prioritised rule is used
-                        if (n.Attributes.Contains("style"))
-                        {
-                            var inlineStyles = n.Attributes["style"].Value;
-
-                            var inline = cssParser.Parse("* { " + inlineStyles + "}")
-                                .StyleRules.SelectMany(x => ConvertInline(x.Declarations));
-
-                            if (!matches.ContainsKey(n))
-                            {
-                                matches.Add(n, new List<ScopedProperty>());
-                            }
-                            matches[n].AddRange(inline);
-                        }
-                    }
+                    StripMatchingTags("descendant-or-self::style");
                 }
 
-                //go through and update all styles
-                foreach (var nodeRules in matches)
+                if (_config.StripLinkTags)
                 {
-                    var node = nodeRules.Key;
-
-                    var orderd = nodeRules.Value.OrderByDescending(x => x.Scope).ToList();
-                    var declerations = nodeRules.Value.GroupBy(x => x.Property.Name).Select(x => x.OrderByDescending(r => r.Scope).First());
-
-                    StringBuilder stylesSB = new StringBuilder();
-                    foreach (var d in declerations)
-                    {
-                        stylesSB.Append(d.Property.ToString());
-                        stylesSB.Append(";");
-                    }
-
-                    if (!node.Attributes.Contains("style"))
-                    {
-                        node.Attributes.Add("style", stylesSB.ToString());
-                    }
-                    else
-                    {
-                        node.Attributes["style"].Value = stylesSB.ToString();
-                    }
+                    StripMatchingTags("descendant-or-self::link[@type = 'text/css' and (@href)] | descendant-or-self::link[@rel = 'stylesheet' and (@href)]");
                 }
             }
 
             return _document;
         }
 
-        private async Task<IEnumerable<ScopedProperty>> LoadCss(Uri baseUri, HtmlDocument doc)
+        private void StripMatchingTags(string xpath)
         {
+            var nodes = _document.DocumentNode.SelectNodes(xpath);
+
+            if (nodes != null)
+            {
+                foreach (var n in nodes)
+                {
+                    n.Remove();
+                }
+            }
+        }
+
+        private IDictionary<HtmlNode, IEnumerable<ScopedProperty>> MatchStylesToNodes(IEnumerable<ScopedProperty> rules)
+        {
+            var allElements = _document.DocumentNode.SelectNodes("descendant-or-self::*");
+
+            var matches = new Dictionary<HtmlNode, List<ScopedProperty>>();
+
+            foreach (var n in allElements)
+            {
+                foreach (var r in rules)
+                {
+                    if (n.IsMatch(r.Scope.Selector))
+                    {
+                        if (!matches.ContainsKey(n))
+                        {
+                            matches.Add(n, new List<ScopedProperty>());
+                        }
+                        matches[n].Add(r);
+                    }
+
+                    //TODO update the appending css rule to make sure the correctly prioritised rule is used
+                    if (n.Attributes.Contains("style"))
+                    {
+                        var inlineStyles = n.Attributes["style"].Value;
+
+                        var inline = cssParser.Parse("* { " + inlineStyles + "}")
+                            .StyleRules.SelectMany(x => ConvertInline(x.Declarations));
+
+                        if (!matches.ContainsKey(n))
+                        {
+                            matches.Add(n, new List<ScopedProperty>());
+                        }
+                        matches[n].AddRange(inline);
+                    }
+                }
+            }
+
+            return matches.ToDictionary(x => x.Key, x => (IEnumerable<ScopedProperty>)x.Value);
+        }
+
+        private static void ApplyStylesToNodes(IDictionary<HtmlNode, IEnumerable<ScopedProperty>> matches)
+        {
+            //go through and update all styles
+            foreach (var nodeRules in matches)
+            {
+                var node = nodeRules.Key;
+
+                var orderd = nodeRules.Value.OrderByDescending(x => x.Scope).ToList();
+                var declerations = nodeRules.Value.GroupBy(x => x.Property.Name).Select(x => x.OrderByDescending(r => r.Scope).First());
+
+                StringBuilder stylesSB = new StringBuilder();
+                foreach (var d in declerations)
+                {
+                    stylesSB.Append(d.Property.ToString());
+                    stylesSB.Append(";");
+                }
+
+                if (!node.Attributes.Contains("style"))
+                {
+                    node.Attributes.Add("style", stylesSB.ToString());
+                }
+                else
+                {
+                    node.Attributes["style"].Value = stylesSB.ToString();
+                }
+            }
+        }
+
+        private async Task<IEnumerable<ScopedProperty>> LoadCss()
+        {
+            Uri baseUri = GetBaseUri();
+
             List<ScopedProperty> results = new List<ScopedProperty>();
-            var styleTags = doc.DocumentNode.SelectNodes("descendant-or-self::link[@type = 'text/css' and (@href)] | descendant-or-self::link[@rel = 'stylesheet' and (@href)] | descendant-or-self::style");
+            var styleTags = _document.DocumentNode.SelectNodes("descendant-or-self::link[@type = 'text/css' and (@href)] | descendant-or-self::link[@rel = 'stylesheet' and (@href)] | descendant-or-self::style");
 
             if (styleTags != null)
             {
@@ -184,23 +221,26 @@ namespace Tocsoft.CssInliner
             return stylesheet.StyleRules;
         }
 
-        private Uri GetBaseUri(HtmlDocument doc)
+        private Uri GetBaseUri()
         {
-            string uriBaseString = _config.OverrideBaseDirectory;
-
+            var rootBase = new Uri(_config.OverrideBaseDirectory, UriKind.RelativeOrAbsolute);
+            if (!rootBase.IsAbsoluteUri)
+            {
+                rootBase = new Uri(Path.GetFullPath(_config.OverrideBaseDirectory) + "\\");
+            }
             //lets load base tasg
-            var baseTag = doc.DocumentNode.SelectSingleNode("descendant-or-self::base");
+            var baseTag = _document.DocumentNode.SelectSingleNode("descendant-or-self::base");
             if (baseTag != null)
             {
                 var attrib = baseTag.Attributes.FirstOrDefault(x => x.Name.ToUpper() == "HREF");
+                var relativeUri = "";
                 if (attrib == null)
                 {
-                    uriBaseString = attrib.Value;
+                    relativeUri = attrib.Value;
+                    rootBase = new Uri(rootBase, relativeUri);
                 }
             }
-
-            var baseUri = new Uri(uriBaseString);
-            return baseUri;
+            return rootBase;
         }
     }
 }

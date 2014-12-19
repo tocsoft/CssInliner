@@ -23,6 +23,9 @@ namespace Tocsoft.CssInliner
             };
 
             OverrideBaseDirectory = Path.GetFullPath(".");
+
+            StripStyleTags = false;
+            StripLinkTags = false;
         }
 
         /// <summary>
@@ -40,6 +43,22 @@ namespace Tocsoft.CssInliner
         /// The base directory.
         /// </value>
         public string OverrideBaseDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [strip style tags].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [strip style tags]; otherwise, <c>false</c>.
+        /// </value>
+        public bool StripStyleTags { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [strip link tags].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [strip link tags]; otherwise, <c>false</c>.
+        /// </value>
+        public bool StripLinkTags { get; set; }
     }
 
 }
