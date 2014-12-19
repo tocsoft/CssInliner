@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExCSS">
+      <HintPath>..\packages\ExCSS.2.0.5\lib\net451\ExCSS.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -57,10 +60,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\submodules\ExCSS\ExCSS\ExCSS.csproj">
-      <Project>{26881075-3f64-4825-a6b5-eaa0d5419d20}</Project>
-      <Name>ExCSS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CssInliner\Tocsoft.CssInliner.csproj">
       <Project>{55e1a01f-ac08-4198-ac16-581d2bf85566}</Project>
       <Name>Tocsoft.CssInliner</Name>
