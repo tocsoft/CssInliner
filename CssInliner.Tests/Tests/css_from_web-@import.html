@@ -1,14 +1,18 @@
 ﻿Load css from local file
 =========================
-OverrideBaseDirectory : .\Tests
+OverrideBaseDirectory : http://localhost
 ==========================
-<link type='text/css' href="css_from_file.css" />
+<style>
+    @import "css_from_web.css";
+</style>
 <div>
     <a id="4" href="#" ></a>
 </div>
 ==========================
 
-<link type='text/css' href="css_from_file.css" />
+<style>
+    @import "css_from_web.css";
+</style>
 <div>
     <a id="4" href="#" style="color:  blue; "></a>
 </div>

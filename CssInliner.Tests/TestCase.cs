@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Tocsoft.CssInliner.ResourceLoaders;
 
 namespace Tocsoft.CssInliner.Tests
 {
@@ -16,7 +18,7 @@ namespace Tocsoft.CssInliner.Tests
         public string Exprected { get; set; }
         public InlinerConfig Config { get; set; }
 
-        public static TestCase Load(string path)
+        public static TestCase Load(string path, HttpMessageHandler msghandler)
         {
             List<string> parts = new List<string>();
             using (var r = File.OpenText(path))
@@ -74,6 +76,9 @@ namespace Tocsoft.CssInliner.Tests
                     res.Config.SetProperty(s.propertyName, s.value);
                 }
             }
+
+
+            res.Config.ResourceLoaders.OfType<HttpResourceLoader>().Single().Client = new System.Net.Http.HttpClient(msghandler);
 
             return res;
         }

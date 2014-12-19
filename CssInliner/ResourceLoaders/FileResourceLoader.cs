@@ -14,7 +14,7 @@ namespace Tocsoft.CssInliner.ResourceLoaders
             return uri.Scheme.ToUpper().StartsWith("FILE");
         }
 
-        public Task<string> Load(Uri uri)
+        public async Task<string> Load(Uri uri)
         {
             var path = uri.LocalPath;
 
@@ -22,7 +22,7 @@ namespace Tocsoft.CssInliner.ResourceLoaders
             using (var s = f.OpenRead())
             using (var sr = new StreamReader(s))
             {
-                return sr.ReadToEndAsync();
+                return await sr.ReadToEndAsync();
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using ExCSS;
 
 namespace Tocsoft.CssInliner
 {
@@ -195,11 +196,10 @@ namespace Tocsoft.CssInliner
 
         private async Task<IEnumerable<ExCSS.StyleRule>> LoadCss(Uri baseUri, HtmlNode node)
         {
-            var css = "";
             if (node.Name.ToUpper() == "STYLE")
             {
                 //inline 
-                css = node.InnerText;
+                return await LoadCss(baseUri, node.InnerText);
             }
             else
             {
@@ -211,14 +211,45 @@ namespace Tocsoft.CssInliner
                     var loader = _config.ResourceLoaders.FirstOrDefault(x => x.CanLoad(uri));
                     if (loader != null)
                     {
-                        css = await loader.Load(uri);
+                        var css = await loader.Load(uri);
+                        return await LoadCss(uri, css);
                     }
                 }
             }
+            return Enumerable.Empty<ExCSS.StyleRule>();
+        }
 
+        private async Task<IEnumerable<ExCSS.StyleRule>> LoadCss(Uri baseUri, string css, int level = 0)
+        {
+            if (level > 10)
+            {
+                //10 levels deep
+                return Enumerable.Empty<ExCSS.StyleRule>();
+            }
             var stylesheet = cssParser.Parse(css);
 
-            return stylesheet.StyleRules;
+            List<StyleRule> rules = new List<StyleRule>();
+            foreach (var rule in stylesheet.Rules)
+            {
+                if (rule is StyleRule)
+                {
+                    rules.Add((StyleRule)rule);
+                }
+                else if (rule is ImportRule)
+                {
+                    var importRule = (ImportRule)rule;
+
+                    var uri = new Uri(baseUri, importRule.Href);
+                    var loader = _config.ResourceLoaders.FirstOrDefault(x => x.CanLoad(uri));
+                    if (loader != null)
+                    {
+                        css = await loader.Load(uri);
+                        var childRules = await LoadCss(uri, css, level + 1); //base uri changes to the file location of the css file
+                        rules.AddRange(childRules);
+                    }
+                }
+            }
+            return rules;
         }
 
         private Uri GetBaseUri()
