@@ -3,7 +3,7 @@ CssInliner
 
 Inlines style sheet rules. We parse and aggrigate all linked and embedded stylesheets(configurable) parses them matches them agains the dom and allies the css styles directly inline on each targeted node.
 
-## Usage
+## Basic usage
 
 ```
 var inlineHtmlComesoutHere = await Tocsoft.CssInliner.Processor.Process(htmlGoesHere);
