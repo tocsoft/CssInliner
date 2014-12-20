@@ -55,7 +55,7 @@ namespace Tocsoft.CssInliner
                     Attribute++;
                 }
 
-                if (selector is ExCSS.TypeSelector)
+                if (selector is ExCSS.ElementSelector)
                 {
                     Element++;
                 }

@@ -67,11 +67,13 @@ namespace Tocsoft.CssInliner
 
         private IDictionary<HtmlNode, IEnumerable<ScopedProperty>> MatchStylesToNodes(IEnumerable<ScopedProperty> rules)
         {
-            var allElements = _document.DocumentNode.SelectNodes("descendant-or-self::*");
+            var allElements = _document.DocumentNode.SelectNodes("descendant-or-self::*") ?? new HtmlNodeCollection(_document.DocumentNode);
+
+            var notUpdated = _document.DocumentNode.SelectNodes("descendant-or-self::style") ?? new HtmlNodeCollection(_document.DocumentNode);
 
             var matches = new Dictionary<HtmlNode, List<ScopedProperty>>();
 
-            foreach (var n in allElements)
+            foreach (var n in allElements.Where(x=>!notUpdated.Contains(x)))
             {
                 foreach (var r in rules)
                 {
@@ -174,7 +176,6 @@ namespace Tocsoft.CssInliner
             var multiSelectorList = selector as ExCSS.MultipleSelectorList;
             if (multiSelectorList != null)
             {
-
                 foreach (var sel in multiSelectorList)
                 {
                     var result = Convert(sel, declaration, startIdx);

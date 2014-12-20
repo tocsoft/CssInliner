@@ -69,11 +69,11 @@ namespace Tocsoft.CssInliner
             return false;
         }
 
-        internal static bool IsSimpleMatch(this HtmlNode node, TypeSelector selector)
+        internal static bool IsSimpleMatch(this HtmlNode node, ElementSelector selector)
         {
             if (selector != null)
             {
-                if (node.Name.ToUpper() != selector.Type.ToUpper())
+                if (node.Name.ToUpper() != selector.Element.ToUpper())
                 {
                     return false;
                 }
@@ -156,12 +156,21 @@ namespace Tocsoft.CssInliner
 
         internal static bool IsSimpleMatch(this HtmlNode node, BaseSelector selector)
         {
-            return node.IsSimpleMatch(selector as TypeSelector)
-                || node.IsSimpleMatch(selector as IdSelector)
-                || node.IsSimpleMatch(selector as ClassSelector)
-                || node.IsSimpleMatch(selector as PseudoClassSelector)
-                || node.IsSimpleMatch(selector as PseudoElementSelector)
-                || node.IsSimpleMatch(selector as AttributeSelector);
+            var agg = selector as AggregateSelectorList;
+            if (agg == null)
+            {
+
+                return
+                    selector is UniveralSelector
+                    || node.IsSimpleMatch(selector as ElementSelector)
+                    || node.IsSimpleMatch(selector as IdSelector)
+                    || node.IsSimpleMatch(selector as ClassSelector)
+                    || node.IsSimpleMatch(selector as PseudoClassSelector)
+                    || node.IsSimpleMatch(selector as PseudoElementSelector)
+                    || node.IsSimpleMatch(selector as AttributeSelector);
+            }
+
+            return agg.All(x => node.IsSimpleMatch(x));
         }
 
         internal static bool IsMatch(this HtmlNode node, CombinatorSelector selector, Stack<CombinatorSelector> remainingStack)
