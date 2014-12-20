@@ -5,12 +5,12 @@ Inlines style sheet rules. We parse and aggrigate all linked and embedded styles
 
 ## Basic usage
 
-```
+```c#
 var inlineHtmlComesoutHere = await Tocsoft.CssInliner.Processor.Process(htmlGoesHere);
 ```
 
 Example
-```
+```html
 <html>
     <head>
         <style type="text/css">
@@ -30,7 +30,7 @@ Example
 
 will get translated into 
 
-```
+```html
 <html>
     <head>
         <style type="text/css">
