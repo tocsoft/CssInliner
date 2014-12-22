@@ -93,22 +93,25 @@
       <Name>net40 - Tocsoft.CssInliner</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\CssInliner.Tests\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\CssInliner.Tests\TestRunner.cs">
+      <Link>TestRunner.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <ItemGroup>
-      <Compile Include="..\..\..\CssInliner.Tests\**\*.cs" />
-    </ItemGroup>
-    <ItemGroup>
       <OutputFiles Include="..\..\..\CssInliner.Tests\**\*.html;..\..\..\CssInliner.Tests\**\*.css;" />
     </ItemGroup>
-    <Copy
-    SourceFiles="@(OutputFiles)"
-    DestinationFolder="$(OutputPath)%(RecursiveDir)"
-    SkipUnchangedFiles="false"
-    />
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="false" />
   </Target>
   <Target Name="AfterBuild">
-    
   </Target>
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
