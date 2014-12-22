@@ -16,9 +16,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net40 - Tocsoft.CssInliner.Tests", "Frameworks\net40\CssInliner.Tests\net40 - Tocsoft.CssInliner.Tests.csproj", "{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{A88EBE4B-822C-4AE6-8451-586B606B109F}"
-	ProjectSection(SolutionItems) = preProject
-		CssInliner.nuspec = CssInliner.nuspec
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
