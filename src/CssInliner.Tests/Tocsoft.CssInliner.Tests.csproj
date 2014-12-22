@@ -113,7 +113,7 @@
     <Content Include="Tests\child selectors.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Tests\univeral.html" />
+    <Content Include="Tests\universal.html" />
     <Content Include="www\css_from_web.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

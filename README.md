@@ -52,3 +52,4 @@ We leave any defined styles inline be default so that things line media queries 
 
 # TODO
 * Add More Tests at the moment we have tests covering some of the basics we needs to add a larger set of tests
+* Add style usage analysis based on finding at https://www.campaignmonitor.com/css/
