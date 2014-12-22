@@ -21,7 +21,7 @@ If (Test-Path $nugetExe){
 
 & "$nugetExe" restore $solution
 
-& "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\msbuild" $solution "/p:Configuration=`"$config`""
+& "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\msbuild" $solution /t:Rebuild "/p:Configuration=`"$config`""
 
 
 $nugetVersion = (Get-Item "$dir\src\CssInliner\bin\$config\Tocsoft.CssInliner.dll" | Select-Object -ExpandProperty VersionInfo)[0].ProductVersion
