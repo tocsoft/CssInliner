@@ -24,6 +24,8 @@ function Update-SourceVersion
     foreach ($o in $input) 
     {
         Write-Host "Updating  '$($o.FullName)' -> $Version"
+
+        Copy-Item $o.FullName ($o.FullName+'.bak')
     
         $assemblyVersionPattern = 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
         $fileVersionPattern = 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'

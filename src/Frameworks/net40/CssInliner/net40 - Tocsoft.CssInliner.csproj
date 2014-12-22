@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tocsoft.CssInliner</RootNamespace>
-    <AssemblyName>CssInliner</AssemblyName>
+    <AssemblyName>Tocsoft.CssInliner</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>9c4d11fb</NuGetPackageImportStamp>
