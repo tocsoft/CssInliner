@@ -6,6 +6,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+#if NET40
+using Task = System.Threading.Tasks.TaskEx;
+#endif
+
 
 namespace Tocsoft.CssInliner.Tests
 {

@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tocsoft.CssInliner", "CssInliner\Tocsoft.CssInliner.csproj", "{55E1A01F-AC08-4198-AC16-581D2BF85566}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tocsoft.CssInliner.Tests", "CssInliner.Tests\Tocsoft.CssInliner.Tests.csproj", "{8F891917-87CE-4FD3-9C01-3C1237177E71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frameworks", "Frameworks", "{810970F6-80F3-4184-BC22-34AB47E5FF8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net40", "net40", "{D7D391FD-7040-4959-8D88-CD53A4CE6226}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net40 - Tocsoft.CssInliner", "Frameworks\net40\CssInliner\net40 - Tocsoft.CssInliner.csproj", "{C26BDAB9-E6A9-4E7A-A20D-B0D7E57A5655}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net40 - Tocsoft.CssInliner.Tests", "Frameworks\net40\CssInliner.Tests\net40 - Tocsoft.CssInliner.Tests.csproj", "{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{A88EBE4B-822C-4AE6-8451-586B606B109F}"
+	ProjectSection(SolutionItems) = preProject
+		CssInliner.nuspec = CssInliner.nuspec
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55E1A01F-AC08-4198-AC16-581D2BF85566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E1A01F-AC08-4198-AC16-581D2BF85566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E1A01F-AC08-4198-AC16-581D2BF85566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E1A01F-AC08-4198-AC16-581D2BF85566}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F891917-87CE-4FD3-9C01-3C1237177E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F891917-87CE-4FD3-9C01-3C1237177E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F891917-87CE-4FD3-9C01-3C1237177E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F891917-87CE-4FD3-9C01-3C1237177E71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C26BDAB9-E6A9-4E7A-A20D-B0D7E57A5655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C26BDAB9-E6A9-4E7A-A20D-B0D7E57A5655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C26BDAB9-E6A9-4E7A-A20D-B0D7E57A5655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C26BDAB9-E6A9-4E7A-A20D-B0D7E57A5655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D7D391FD-7040-4959-8D88-CD53A4CE6226} = {810970F6-80F3-4184-BC22-34AB47E5FF8A}
+		{C26BDAB9-E6A9-4E7A-A20D-B0D7E57A5655} = {D7D391FD-7040-4959-8D88-CD53A4CE6226}
+		{5CE9A1E3-7D91-4D1B-A344-8EFEDBA46CF7} = {D7D391FD-7040-4959-8D88-CD53A4CE6226}
+	EndGlobalSection
+EndGlobal

@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using ExCSS;
+#if NET40
+using Task = System.Threading.Tasks.TaskEx;
+#endif
+
 
 namespace Tocsoft.CssInliner
 {
@@ -146,6 +150,7 @@ namespace Tocsoft.CssInliner
                 var styleTasks = styleTags.Select(x => LoadCss(baseUri, x)).ToArray();
 
                 await Task.WhenAll(styleTasks);
+
 
                 var rules = styleTasks.SelectMany(x => x.Result);
 

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package  xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>CssInliner</id>
+    <version>$version$</version>
+    <title>Css Inliner</title>
+    <authors>tocsoft</authors>
+    <owners>tocsoft</owners>
+
+    <projectUrl>https://github.com/tocsoft/CssInliner</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Inlines css styles into the html dom</description>
+
+    <copyright>Copyright 2014</copyright>
+    <tags>Css Html Email</tags>
+      <dependencies>
+          <group>
+              <package id="ExCSS" version="2.0.6"/>
+              <package id="HtmlAgilityPack" version="1.4.9"/>
+          </group>
+
+          <group targetFramework="net40">
+              <dependency id="Microsoft.Bcl.Async" />
+              <dependency id="Microsoft.Net.Http" />
+          </group>
+      </dependencies>
+  </metadata>
+    <files>
+        <file src="CssInliner\bin\$configuration$\CssInliner.dll" target="lib\net451" />
+        <file src="Frameworks\net40\CssInliner\bin\$configuration$\CssInliner.dll" target="lib\net40" />
+    </files>
+</package>

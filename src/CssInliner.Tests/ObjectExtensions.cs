@@ -13,15 +13,17 @@ namespace Tocsoft.CssInliner.Tests
             var p = obj.GetType().GetProperties().FirstOrDefault(x => x.Name.ToUpper() == propertyName.Trim().ToUpper());
             if (p != null)
             {
+                object finalValue = null;
                 if (p.PropertyType == typeof(bool))
                 {
-                    p.SetMethod.Invoke(obj, new object[] { bool.Parse(value) });
+                    finalValue = bool.Parse(value);
                 }
                 else if (p.PropertyType == typeof(string))
                 {
-                    p.SetMethod.Invoke(obj, new object[] { value.Trim() });
+                    finalValue = value.Trim();
                 }
 
+                p.SetValue(obj, finalValue, new object[0]);
             }
         }
 
