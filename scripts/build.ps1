@@ -24,9 +24,12 @@ If (Test-Path $nugetExe){
 & "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\msbuild" $solution "/p:Configuration=`"$config`""
 
 
-$nugetVersion = Get-Item "$dir\src\CssInliner\bin\$config\Tocsoft.CssInliner.dll" | Select-Object -ExpandProperty VersionInfo
+$nugetVersion = (Get-Item "$dir\src\CssInliner\bin\$config\Tocsoft.CssInliner.dll" | Select-Object -ExpandProperty VersionInfo)[0].ProductVersion
 
-& "$nugetExe" pack "$dir\src\CssInliner.nuspec" -OutputDirectory "$dir\artefacts" -BasePath "$dir\src" -Version $nugetVersion
+#$nugetVersion 
+New-Item -ItemType Directory -Force -Path "$dir\artefacts"
+
+& "$nugetExe" pack "$dir\src\CssInliner.nuspec" -OutputDirectory "$dir\artefacts" -BasePath "$dir\src" -Version $nugetVersion -Properties "Configuration=$config"
 
 
 if ($version -ne "") {
