@@ -9,6 +9,9 @@ using HtmlAgilityPack;
 using Moq;
 using NUnit.Framework;
 using Tocsoft.CssInliner.ResourceLoaders;
+#if NET40
+using Task = System.Threading.Tasks.TaskEx;
+#endif
 
 namespace Tocsoft.CssInliner.Tests
 {
@@ -34,13 +37,10 @@ namespace Tocsoft.CssInliner.Tests
 
         [Test]
         [TestCaseSource("TestCases")]
-        public async Task Run(TestCase test)
+        public void Run(TestCase test)
         {
-
-
-
             var processor = new StringProcessor(test.Source, test.Config);
-            var result = await processor.Process();
+            var result = processor.Process().GetAwaiter().GetResult();
 
             HtmlAssert.AreSame(test.Exprected, result);
         }

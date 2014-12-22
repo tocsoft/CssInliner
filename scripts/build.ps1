@@ -20,8 +20,14 @@ If (Test-Path $nugetExe){
 }
 
 & "$nugetExe" restore $solution
+$msBuild = "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
 
-& "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\msbuild" $solution /t:Rebuild "/p:Configuration=`"$config`""
+if (Get-Command "msbuild.exe" -ErrorAction SilentlyContinue) 
+{
+    $msBuild = "msbuild.exe"
+}
+
+& $msBuild $solution /t:Rebuild "/p:Configuration=`"$config`""
 
 
 $nugetVersion = (Get-Item "$dir\src\CssInliner\bin\$config\Tocsoft.CssInliner.dll" | Select-Object -ExpandProperty VersionInfo)[0].ProductVersion
