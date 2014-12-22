@@ -1,2 +1,2 @@
 @echo Off
-powershell -File build.ps1 %*
+powershell -File scripts\build.ps1 %*
