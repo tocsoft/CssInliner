@@ -106,10 +106,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
-    <ItemGroup>
-      <OutputFiles Include="..\..\..\CssInliner.Tests\**\*.html;..\..\..\CssInliner.Tests\**\*.css;" />
-    </ItemGroup>
-    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="false" />
+      <ItemGroup>
+          <WWWFiles Include="..\..\..\CssInliner.Tests\www\**\*.html;..\..\..\CssInliner.Tests\www\**\*.css;" />
+      </ItemGroup>
+      <Copy SourceFiles="@(WWWFiles)" DestinationFolder="$(OutputPath)www\%(RecursiveDir)" SkipUnchangedFiles="false" />
+      <ItemGroup>
+          <TestFiles Include="..\..\..\CssInliner.Tests\Tests\**\*.html;..\..\..\CssInliner.Tests\Tests\**\*.css;"  />
+      </ItemGroup>
+      <Copy SourceFiles="@(TestFiles)" DestinationFolder="$(OutputPath)Tests\%(RecursiveDir)" SkipUnchangedFiles="false" />
   </Target>
   <Target Name="AfterBuild">
   </Target>
